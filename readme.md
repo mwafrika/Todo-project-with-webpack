@@ -8,7 +8,7 @@
 
 ![screenshot](./src/assets/screenshot1.png)
 
-Additional description about the project and its features.
+Additional description about the project and its features
 
 ## Tech used
 
