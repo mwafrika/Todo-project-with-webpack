@@ -11,7 +11,7 @@ export const todoList = [
   },
   {
     id: 2,
-    description: 'Submit my pull request for the capstone project',
+    description: 'Submit my pull request for the capstone',
     completed: false,
   },
   {
@@ -36,7 +36,8 @@ headerText.classList.add('title');
 export const headerImg = document.createElement('span');
 
 headerText.innerHTML = "Today's To Do";
-headerImg.innerHTML = "<span class='icon'><i class='fa-solid fa-arrows-rotate'></i></span>";
+headerImg.innerHTML =
+  "<span class='icon'><i class='fa-solid fa-arrows-rotate'></i></span>";
 header.classList.add('header');
 export const footer = document.createElement('div');
 footer.classList.add('myFooter');
