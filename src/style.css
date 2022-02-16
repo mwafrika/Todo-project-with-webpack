@@ -1,14 +1,21 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  height: 100%;
+}
 body {
+  min-height: 100vh;
+  margin: 0 auto;
   background-color: #f0f0f0;
-  height: 100vh;
-  overflow: hidden;
 }
 
 .todo-list {
   display: flex;
   flex-direction: column;
   list-style: none;
-  margin: 0;
   padding: 0;
 }
 
@@ -16,7 +23,7 @@ body {
   display: flex;
   flex-direction: column;
   height: auto;
-  width: 400px;
+  width: 100%;
   background-color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
@@ -44,12 +51,21 @@ body {
   height: 50px;
   align-items: center;
   justify-content: center;
-  background-color: #f3f3f3;
+  /* background-color: #f3f3f3; */
+  background-color: darkgrey;
 }
 
 .myFooter a {
   text-decoration: none;
-  color: #928f8f;
+  /* color: #928f8f; */
+  color: black;
+}
+
+.main-header {
+  width: 100%;
+  height: 100px;
+  background-color: #928f8f;
+  /* margin-top: -60px; */
 }
 
 .myFooter a:hover {
@@ -79,7 +95,6 @@ body {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgb(172, 172, 172);
-  padding-right: 20px;
 }
 
 .header {
@@ -88,7 +103,7 @@ body {
   justify-content: space-between;
   align-items: center;
   height: 50px;
-  width: auto;
+  width: 100%;
   padding-left: 20px;
   padding-right: 20px;
   border-bottom: 1px solid rgb(172, 172, 172);
@@ -101,10 +116,49 @@ body {
 .main-container {
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 100%;
+  height: 100vh;
+  /* width: 500px; */
+  /* margin-top: -30px; */
 }
 
 .content {
   color: rgb(71, 69, 69);
+}
+
+@media screen and (min-width: 320px) {
+  .main-container {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+@media screen and (min-width: 768px) {
+  .main-container {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .form {
+    width: 80%;
+  }
+  .myFooter {
+    width: 100%;
+  }
+}
+@media screen and (min-width: 1024px) {
+  .main-container {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .main-container {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }

@@ -6,7 +6,7 @@ export const todoList = [
   },
   {
     id: 1,
-    description: 'Complete the coding challenge at hackerank',
+    description: 'Complete the coding challenge',
     completed: false,
   },
   {
@@ -26,6 +26,8 @@ export const todoList = [
   },
 ];
 
+export const outerHeader = document.createElement('header');
+outerHeader.classList.add('main-header');
 export const todoListElement = document.querySelector('.todo-list');
 export const form = document.createElement('form');
 export const header = document.createElement('div');
@@ -49,7 +51,9 @@ export const inputTodo = document.createElement('input');
 export const refreshImg = document.createElement('i');
 refreshImg.style.color = '#928f8f';
 inputTodo.placeholder = 'Add to your list...';
+
 export const mainContainer = document.createElement('div');
+
 export const append = () => {
   inputContainer.appendChild(inputTodo);
   inputContainer.appendChild(refreshImg);
