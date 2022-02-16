@@ -3,16 +3,20 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "homepage": "https://mwafrika.github.io/Todo-project-with-webpack/",
   "scripts": {
     "start": "webpack serve --open",
     "build": "SET NODE_ENV='production' && webpack",
-    "deploy": "git subtree push --prefix dist origin gh-pages"
+    "deploy1": "git subtree push --prefix dist origin gh-pages",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -b todo-list -d build"
   },
   "keywords": [],
   "author": "mwafrika",
   "license": "ISC",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.0.0"
+    "@fortawesome/fontawesome-free": "^6.0.0",
+    "gh-pages": "^3.2.3"
   },
   "devDependencies": {
     "@babel/core": "^7.17.2",
