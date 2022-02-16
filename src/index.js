@@ -1,63 +1,16 @@
+import '@fortawesome/fontawesome-free/js/all';
 import('./style.css');
-
-const todoList = [
-  {
-    id: 1,
-    description: 'Take out the trash',
-    completed: false,
-  },
-  {
-    id: 2,
-    description: 'Take out the trash',
-    completed: false,
-  },
-  {
-    id: 3,
-    description: 'Take out the trash',
-    completed: false,
-  },
-  {
-    id: 4,
-    description: 'Take out the trash',
-    completed: false,
-  },
-  {
-    id: 5,
-    description: 'Take out the trash',
-    completed: false,
-  },
-];
+import {
+  todoList,
+  todoListElement,
+  form,
+  footer,
+  mainContainer,
+  append,
+} from './modules.js';
 
 const todo = () => {
-  const todoListElement = document.querySelector('.todo-list');
-  const form = document.createElement('form');
-  const header = document.createElement('div');
-  const headerText = document.createElement('h1');
-  const clear = document.createElement('a');
-  clear.href = '#';
-  headerText.classList.add('title');
-  const headerImg = document.createElement('span');
-
-  headerText.innerHTML = "Today's To Do";
-  headerImg.innerHTML = 'Image';
-  header.classList.add('header');
-  const footer = document.createElement('div');
-  footer.classList.add('myFooter');
-  clear.innerHTML = 'Clear all completed';
-
-  const inputTodo = document.createElement('input');
-  inputTodo.placeholder = 'Add to your list...';
-  inputTodo.classList.add('input-todo');
-  footer.appendChild(clear);
-  header.appendChild(headerText);
-  header.appendChild(headerImg);
-  form.appendChild(header);
-  form.appendChild(inputTodo);
-
-  form.classList.add('form');
-  const mainContainer = document.createElement('div');
-  mainContainer.classList.add('main-container');
-
+  append();
   todoList.forEach((todo) => {
     const todoElement = document.createElement('li');
     const { completed, description } = todo;
@@ -69,7 +22,9 @@ const todo = () => {
                         } class='input' />
                         <span>${description}</span>
                     </div>
-                   <span class='icon'>Image</span>
+                   <span class='icon'>
+                   <i class="fa-solid fa-ellipsis-vertical"></i>
+                   </span>
                     </div>
                     `;
     todoListElement.appendChild(todoElement);
