@@ -36,8 +36,7 @@ headerText.classList.add('title');
 export const headerImg = document.createElement('span');
 
 headerText.innerHTML = "Today's To Do";
-headerImg.innerHTML =
-  "<span class='icon'><i class='fa-solid fa-arrows-rotate'></i></span>";
+headerImg.innerHTML = "<span class='icon'><i class='fa-solid fa-arrows-rotate'></i></span>";
 header.classList.add('header');
 export const footer = document.createElement('div');
 footer.classList.add('myFooter');

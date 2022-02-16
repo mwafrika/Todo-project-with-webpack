@@ -1,5 +1,4 @@
-import '@fortawesome/fontawesome-free/js/all';
-import('./style.css');
+import '@fortawesome/fontawesome-free/js/all.js';
 import {
   todoList,
   todoListElement,
@@ -8,6 +7,8 @@ import {
   mainContainer,
   append,
 } from './modules.js';
+
+import('./style.css');
 
 const todo = () => {
   append();
@@ -18,8 +19,8 @@ const todo = () => {
                   <div class='list-row'>
                     <div class='content'>
                         <input type="checkbox" ${
-                          completed ? 'checked' : ''
-                        } class='input' />
+  completed ? 'checked' : ''
+} class='input' />
                         <span>${description}</span>
                     </div>
                    <span class='icon'>
