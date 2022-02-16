@@ -94,9 +94,17 @@ body {
   border-bottom: 1px solid rgb(172, 172, 172);
 }
 
+.header h1 {
+  color: rgb(71, 69, 69);
+}
+
 .main-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
+}
+
+.content {
+  color: rgb(71, 69, 69);
 }
