@@ -33,6 +33,28 @@ function main() {
       localStorage.setItem('todos', JSON.stringify(todos));
     }
   });
+
+  // show edit input and edit icon
+  document.querySelectorAll('.edit-btn').forEach((edit) => {
+    edit.addEventListener('click', function (e) {
+      const target = e.target.parentElement.parentElement;
+      if (e.target.classList.contains('editInputShow')) {
+        console.log('edit', e.target);
+        const card = e.target.parentElement;
+        const input = card.querySelector('.editInput');
+        const icon = card.querySelector('.edit-btn');
+        const item = card.querySelector('.item');
+        const deleteIcon = card.querySelector('.clear');
+        input.classList.toggle('editInputShow');
+        icon.classList.toggle('clearShow');
+        item.classList.toggle('hide');
+        deleteIcon.classList.toggle('clearShow');
+      } else {
+        console.log('edit none', e.target);
+      }
+    });
+  });
+
   // add new todos on user input
   const add = document.getElementById('add-btn');
   const txtInput = document.querySelector('.txt-input');
@@ -44,8 +66,9 @@ function main() {
         ? []
         : JSON.parse(localStorage.getItem('todos'));
       const currentTodo = {
+        id: todos.length + 1,
         item,
-        isCompleted: false,
+        completed: false,
       };
       addTodo([currentTodo]);
       todos.push(currentTodo);
@@ -53,6 +76,26 @@ function main() {
     }
     txtInput.focus();
   });
+
+  // edit todos on user input
+  const editDescription = document.querySelector('.edit-btn');
+  const editInput = document.querySelector('.editInput');
+  editDescription.addEventListener('click', function () {
+    const item = editInput.value.trim();
+    if (item) {
+      editInput.value = '';
+      const todos = JSON.parse(localStorage.getItem('todos'));
+      const currentTodo = todos.find(
+        (todo) => todo.id === parseInt(editInput.dataset.id)
+      )
+        ? todos.find((todo) => todo.id === parseInt(editInput.dataset.id))
+        : {};
+      currentTodo.item = item;
+      localStorage.setItem('todos', JSON.stringify(todos));
+      // renderTodo();
+    }
+  });
+
   // add todo also on enter key event
   txtInput.addEventListener('keydown', function (e) {
     if (e.keyCode === 13) {
@@ -84,7 +127,7 @@ function main() {
 
 function stateTodo(index, completed) {
   const todos = JSON.parse(localStorage.getItem('todos'));
-  todos[index].isCompleted = completed;
+  todos[index].completed = completed;
   localStorage.setItem('todos', JSON.stringify(todos));
 }
 
@@ -93,6 +136,13 @@ function stateTodo(index, completed) {
 function removeTodo(index) {
   const todos = JSON.parse(localStorage.getItem('todos'));
   todos.splice(index, 1);
+  localStorage.setItem('todos', JSON.stringify(todos));
+}
+
+// edit todos on user input
+function editTodo(index, item) {
+  const todos = JSON.parse(localStorage.getItem('todos'));
+  todos[index].item = item;
   localStorage.setItem('todos', JSON.stringify(todos));
 }
 
@@ -120,25 +170,32 @@ function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
     const cbInput = document.createElement('input');
     const check = document.createElement('span');
     const item = document.createElement('p');
+    const editInput = document.createElement('input');
     const button = document.createElement('span');
+    const edit = document.createElement('span');
     const icon = document.createElement('i');
+    const iconEdit = document.createElement('i');
 
     // Add classes
     card.classList.add('card');
     button.classList.add('clear');
+    edit.classList.add('editInputShow');
+    edit.classList.add('edit-btn');
     cbContainer.classList.add('cb-container');
     cbInput.classList.add('cb-input');
     item.classList.add('item');
+    editInput.classList.add('editInput');
     check.classList.add('check');
     button.classList.add('clear');
     icon.classList.add('fa', 'fa-times', 'clear');
+    iconEdit.classList.add('fas', 'fa-ellipsis-v');
     // Set attributes
     card.setAttribute('draggable', true);
     cbInput.setAttribute('type', 'checkbox');
     // set todo item for card
     item.textContent = todo.item;
     // if completed -> add respective class / attribute
-    if (todo.isCompleted) {
+    if (todo.completed) {
       card.classList.add('checked');
       cbInput.setAttribute('checked', 'checked');
     }
@@ -181,11 +238,14 @@ function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
     });
     // parent.appendChild(child)
     button.appendChild(icon);
+    edit.appendChild(iconEdit);
     cbContainer.appendChild(cbInput);
     cbContainer.appendChild(check);
     card.appendChild(cbContainer);
     card.appendChild(item);
+    card.appendChild(editInput);
     card.appendChild(button);
+    card.appendChild(edit);
     document.querySelector('.todos').appendChild(card);
   });
 }
