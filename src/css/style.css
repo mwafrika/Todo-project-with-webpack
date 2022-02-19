@@ -33,8 +33,6 @@ img {
   user-select: none;
 }
 
-/* BODY */
-
 body {
   font: var(--fw-normal) var(--base-font) var(--ff-sans);
   background-color: var(--bg-white-new);
@@ -43,8 +41,6 @@ body {
   width: min(85%, 54rem);
   margin: auto;
 }
-
-/* INPUT AND BUTTON */
 
 input,
 button {
@@ -67,8 +63,6 @@ label {
   display: none;
 }
 
-/* ALL ARE CARDS  */
-
 .card {
   background-color: var(--bg-white-new);
   display: flex;
@@ -76,11 +70,8 @@ label {
   align-items: center;
   padding: 1.9rem 2rem;
   gap: 2rem;
-
   border-bottom: 1px solid rgb(173, 173, 173);
 }
-
-/* HEADER'S CARD */
 
 header.card {
   background: transparent;
@@ -95,7 +86,7 @@ header.card {
 
 header.card h1 {
   font-weight: 700;
-  font-size: calc(var(--base-font) * 2);
+  font-size: 25px;
   padding-bottom: 20px;
 }
 
@@ -203,8 +194,11 @@ header.card h1 {
   display: flex;
   justify-content: center;
 }
-/* TODOS CONTAINER */
 
+.refresh {
+  font-size: 2em;
+  color: grey;
+}
 .todos > * {
   transition: 0.4s ease;
 }
@@ -230,8 +224,6 @@ body.light .todos {
   box-shadow: 0 0 2rem 0.4rem var(--clr-box-shadow);
 }
 
-/* COMPLETED ITEM */
-
 .todos .card.checked .item {
   text-decoration: line-through;
   color: var(--clr-gb-3);
@@ -239,8 +231,6 @@ body.light .todos {
   font-size: 18px;
 }
 
-/* CLEAR CONTAINER */
-/* by default, it's hidden */
 .clear {
   display: none;
 }
@@ -304,6 +294,10 @@ body.light .stat {
   color: var(--clr-blue);
 }
 
+#clear-completed {
+  font-size: 18px;
+}
+
 footer {
   margin: 4rem 0;
   text-align: center;
@@ -333,7 +327,6 @@ footer {
   border-top: 0.2rem solid var(--clr-gb-6);
 }
 
-/* FALL ANIMATION */
 .todos .card.fall {
   pointer-events: none;
   animation: fall 0.2s forwards ease;
@@ -354,7 +347,6 @@ footer {
   }
 }
 
-/* DRAG AND DROP */
 .todos .card.dragging {
   opacity: 0.5;
 }

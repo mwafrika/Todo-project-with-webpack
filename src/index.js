@@ -1,16 +1,10 @@
 import '@fortawesome/fontawesome-free/js/all.js';
-
 import('./css/style.css');
 
-/* DOMContentLoaded */
 document.addEventListener('DOMContentLoaded', main);
 
-/* main() FUNCTION */
-
 function main() {
-  // get alltodos and initialise listeners
   addTodo();
-  // dragover on .todos container
   document.querySelector('.todos').addEventListener('dragover', function (e) {
     e.preventDefault();
     if (
@@ -34,7 +28,6 @@ function main() {
     }
   });
 
-  // show edit input and edit icon
   document.querySelectorAll('.edit-btn').forEach((edit) => {
     edit.addEventListener('click', function (e) {
       const target = e.target.parentElement.parentElement;
@@ -46,15 +39,20 @@ function main() {
         const deleteIcon = card.querySelector('.clear');
         const editBtn = card.querySelector('.edit-btn');
 
-        input.classList.toggle('editInputShow');
-        item.classList.toggle('hide');
-        editBtn.classList.toggle('hide');
-        deleteIcon.classList.toggle('clearShow');
+        editBtn.classList.remove('editInputShow');
+        input.classList.add('hide');
+        deleteIcon.classList.add('clearShow');
+        input.classList.add('editInputShow');
+        item.classList.add('hide');
+        editBtn.classList.add('editInputShow');
+        editBtn.classList.add('editInputShow');
+
+        edit.classList.add('hide');
+        edit.classList.remove('editInputShow');
       }
     });
   });
 
-  // add new todos on user input
   const add = document.getElementById('add-btn');
   const txtInput = document.querySelector('.txt-input');
   add.addEventListener('click', function () {
@@ -75,33 +73,28 @@ function main() {
     }
     txtInput.focus();
   });
-  // edit todos on user input
+
   document.querySelectorAll('.editInput').forEach((input) => {
     input.addEventListener('change', function (e) {
       let item = input.value.trim();
 
       if (item) {
-        // input.value = '';
         const todos = JSON.parse(localStorage.getItem('todos'));
         const currentTodo = todos.find(
           (todo) => parseInt(todo.id) === parseInt(input.dataset.id)
         );
 
         editTodo(todos.indexOf(currentTodo) + 1, item);
-        // localStorage.setItem('todos', JSON.stringify(todos));
-        // localStorage.setItem('todos', JSON.stringify(todos));
       }
     });
   });
 
-  // add todo also on enter key event
   txtInput.addEventListener('keydown', function (e) {
     if (e.keyCode === 13) {
       add.click();
     }
   });
 
-  // clear completed
   document
     .getElementById('clear-completed')
     .addEventListener('click', function () {
@@ -121,15 +114,11 @@ function main() {
     });
 }
 
-/* stateTodo() FUNCTION TO UPDATE TODO ABOUT COMPLETION */
-
 function stateTodo(index, completed) {
   const todos = JSON.parse(localStorage.getItem('todos'));
   todos[index].completed = completed;
   localStorage.setItem('todos', JSON.stringify(todos));
 }
-
-/* removeManyTodo() FUNCTION TO REMOVE ONE TODO */
 
 function removeTodo(index) {
   const todos = JSON.parse(localStorage.getItem('todos'));
@@ -137,15 +126,12 @@ function removeTodo(index) {
   localStorage.setItem('todos', JSON.stringify(todos));
 }
 
-// edit todos on user input
 function editTodo(index, item) {
   const todos = JSON.parse(localStorage.getItem('todos'));
   todos[index].item = item;
   console.log(todos);
   localStorage.setItem('todos', JSON.stringify(todos));
 }
-
-/* removeManyTodo FUNCTION TO REMOVE MANY TODOS */
 
 function removeManyTodo(indexes) {
   let todos = JSON.parse(localStorage.getItem('todos'));
@@ -155,14 +141,11 @@ function removeManyTodo(indexes) {
   localStorage.setItem('todos', JSON.stringify(todos));
 }
 
-/* addTodo() FUNCTION TO LIST/CREATE TODOS AND ADD EVENT LISTENERS */
-
 function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
   if (!todos) {
     return [];
   }
-  const itemsLeft = document.getElementById('items-left');
-  // create cards
+
   todos.forEach(function (todo) {
     const card = document.createElement('li');
     const cbContainer = document.createElement('div');
@@ -174,8 +157,6 @@ function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
     const edit = document.createElement('span');
     const icon = document.createElement('i');
     const iconEdit = document.createElement('i');
-
-    // Add classes
     card.classList.add('card');
     button.classList.add('clear');
     edit.classList.add('editInputShow');
@@ -188,31 +169,28 @@ function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
     button.classList.add('clear');
     icon.classList.add('fa', 'fa-times');
     iconEdit.classList.add('fas', 'fa-ellipsis-v');
-    // Set attributes
+
     card.setAttribute('draggable', true);
     card.setAttribute('data-id', todo.id);
     cbInput.setAttribute('type', 'checkbox');
-    // set todo item for card
     item.textContent = todo.item;
 
     editInput.setAttribute('type', 'text');
     editInput.setAttribute('data-id', todo.id);
     editInput.setAttribute('value', todo.item);
     editInput.setAttribute('class', 'editInput');
-
-    // if completed -> add respective class / attribute
     if (todo.completed) {
       card.classList.add('checked');
       cbInput.setAttribute('checked', 'checked');
     }
-    // Add drag listener to card
+
     card.addEventListener('dragstart', function () {
       this.classList.add('dragging');
     });
     card.addEventListener('dragend', function () {
       this.classList.remove('dragging');
     });
-    // Add click listener to checkbox
+
     cbInput.addEventListener('click', function () {
       const correspondingCard = this.parentElement.parentElement;
       const checked = this.checked;
@@ -227,7 +205,6 @@ function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
         : correspondingCard.classList.remove('checked');
     });
 
-    // Add click listener to clear button
     button.addEventListener('click', function () {
       const correspondingCard = this.parentElement;
       correspondingCard.classList.add('fall');
@@ -242,7 +219,7 @@ function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
         }, 100);
       });
     });
-    // parent.appendChild(child)
+
     button.appendChild(icon);
     edit.appendChild(iconEdit);
     cbContainer.appendChild(cbInput);
