@@ -125,7 +125,7 @@ header.card h1 {
 
 .card .cb-container .cb-input {
   transform: scale(1.8);
-  opacity: 0;
+  opacity: 1;
 }
 
 .card .cb-container .check {
