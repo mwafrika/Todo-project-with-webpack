@@ -69,17 +69,15 @@ function main() {
       txtInput.value = '';
       const todos = !localStorage.getItem('todos')
         ? []
-        : JSON.parse(localStorage.getItem('todos')).sort((a, b) => a.id - b.id);
+        : JSON.parse(localStorage.getItem('todos'));
       const currentTodo = {
         id: todos.length + 1,
         item,
         completed: false,
       };
       addTodo([currentTodo]);
-      localStorage.setItem('todos', JSON.stringify([...todos, currentTodo]));
-
-      // todos.push(currentTodo);
-      // localStorage.setItem('todos', JSON.stringify(todos));
+      todos.push(currentTodo);
+      localStorage.setItem('todos', JSON.stringify(todos));
     }
     txtInput.focus();
   });
@@ -128,6 +126,7 @@ const reorderIdInAscendingOrder = (index, newIndex) => {
   todos.splice(newIndex, 0, removed[0]);
   return todos;
 };
+
 const stateTodo = (index, completed) => {
   const todos = JSON.parse(localStorage.getItem('todos'));
   todos[index].completed = completed;
@@ -141,7 +140,6 @@ const removeTodo = (index) => {
   localStorage.setItem('todos', JSON.stringify(todos));
 };
 
-// if an item is removed from the todos array, the id of the remaining items needs to be updated
 const updateRemaining = (indexes) => {
   const todos = JSON.parse(localStorage.getItem('todos'));
   indexes.forEach((index) => {
