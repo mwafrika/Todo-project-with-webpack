@@ -1,4 +1,6 @@
+/* eslint-disable no-unused-expressions */
 import '@fortawesome/fontawesome-free/js/all.js';
+
 import('./css/style.css');
 
 document.addEventListener('DOMContentLoaded', main);
@@ -8,14 +10,13 @@ function main() {
   document.querySelector('.todos').addEventListener('dragover', function (e) {
     e.preventDefault();
     if (
-      !e.target.classList.contains('dragging') &&
-      e.target.classList.contains('card')
+      !e.target.classList.contains('dragging')
+      && e.target.classList.contains('card')
     ) {
       const draggingCard = document.querySelector('.dragging');
       const cards = [...this.querySelectorAll('.card')];
       const currPos = cards.indexOf(draggingCard);
       const newPos = cards.indexOf(e.target);
-      console.log(currPos, newPos);
       if (currPos > newPos) {
         this.insertBefore(draggingCard, e.target);
       } else {
@@ -29,10 +30,8 @@ function main() {
   });
 
   document.querySelectorAll('.edit-btn').forEach((edit) => {
-    edit.addEventListener('click', function (e) {
-      const target = e.target.parentElement.parentElement;
+    edit.addEventListener('click', (e) => {
       if (e.target.classList.contains('editInputShow')) {
-        console.log('edit', e.target);
         const card = e.target.parentElement;
         const input = card.querySelector('.editInput');
         const item = card.querySelector('.item');
@@ -55,7 +54,7 @@ function main() {
 
   const add = document.getElementById('add-btn');
   const txtInput = document.querySelector('.txt-input');
-  add.addEventListener('click', function () {
+  add.addEventListener('click', () => {
     const item = txtInput.value.trim();
     if (item) {
       txtInput.value = '';
@@ -75,13 +74,13 @@ function main() {
   });
 
   document.querySelectorAll('.editInput').forEach((input) => {
-    input.addEventListener('change', function (e) {
-      let item = input.value.trim();
+    input.addEventListener('change', () => {
+      const item = input.value.trim();
 
       if (item) {
         const todos = JSON.parse(localStorage.getItem('todos'));
         const currentTodo = todos.find(
-          (todo) => parseInt(todo.id) === parseInt(input.dataset.id)
+          (todo) => parseInt(todo.id, 10) === parseInt(input.dataset.id, 10),
         );
 
         editTodo(todos.indexOf(currentTodo) + 1, item);
@@ -89,64 +88,59 @@ function main() {
     });
   });
 
-  txtInput.addEventListener('keydown', function (e) {
+  txtInput.addEventListener('keydown', (e) => {
     if (e.keyCode === 13) {
       add.click();
     }
   });
 
-  document
-    .getElementById('clear-completed')
-    .addEventListener('click', function () {
-      let deleteIndexes = [];
-      document.querySelectorAll('.card.checked').forEach(function (card) {
-        deleteIndexes.push(
-          [...document.querySelectorAll('.todos .card')].indexOf(card)
-        );
-        card.classList.add('fall');
-        card.addEventListener('animationend', function (e) {
-          setTimeout(function () {
-            card.remove();
-          }, 100);
-        });
+  document.getElementById('clear-completed').addEventListener('click', () => {
+    const deleteIndexes = [];
+    document.querySelectorAll('.card.checked').forEach((card) => {
+      deleteIndexes.push(
+        [...document.querySelectorAll('.todos .card')].indexOf(card),
+      );
+      card.classList.add('fall');
+      card.addEventListener('animationend', () => {
+        setTimeout(() => {
+          card.remove();
+        }, 100);
       });
-      removeManyTodo(deleteIndexes);
     });
+    removeManyTodo(deleteIndexes);
+  });
 }
 
-function stateTodo(index, completed) {
+const stateTodo = (index, completed) => {
   const todos = JSON.parse(localStorage.getItem('todos'));
   todos[index].completed = completed;
   localStorage.setItem('todos', JSON.stringify(todos));
-}
+};
 
-function removeTodo(index) {
+const removeTodo = (index) => {
   const todos = JSON.parse(localStorage.getItem('todos'));
   todos.splice(index, 1);
   localStorage.setItem('todos', JSON.stringify(todos));
-}
+};
 
-function editTodo(index, item) {
+const editTodo = (index, item) => {
   const todos = JSON.parse(localStorage.getItem('todos'));
   todos[index].item = item;
-  console.log(todos);
   localStorage.setItem('todos', JSON.stringify(todos));
-}
+};
 
-function removeManyTodo(indexes) {
+const removeManyTodo = (indexes) => {
   let todos = JSON.parse(localStorage.getItem('todos'));
-  todos = todos.filter(function (todo, index) {
-    return !indexes.includes(index);
-  });
+  todos = todos.filter((todo, index) => !indexes.includes(index));
   localStorage.setItem('todos', JSON.stringify(todos));
-}
+};
 
-function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
+const addTodo = (todos = JSON.parse(localStorage.getItem('todos'))) => {
   if (!todos) {
     return [];
   }
 
-  todos.forEach(function (todo) {
+  todos.forEach((todo) => {
     const card = document.createElement('li');
     const cbContainer = document.createElement('div');
     const cbInput = document.createElement('input');
@@ -193,12 +187,12 @@ function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
 
     cbInput.addEventListener('click', function () {
       const correspondingCard = this.parentElement.parentElement;
-      const checked = this.checked;
+      const { checked } = this;
       stateTodo(
         [...document.querySelectorAll('.todos .card')].indexOf(
-          correspondingCard
+          correspondingCard,
         ),
-        checked
+        checked,
       );
       checked
         ? correspondingCard.classList.add('checked')
@@ -210,11 +204,11 @@ function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
       correspondingCard.classList.add('fall');
       removeTodo(
         [...document.querySelectorAll('.todos .card')].indexOf(
-          correspondingCard
-        )
+          correspondingCard,
+        ),
       );
-      correspondingCard.addEventListener('animationend', function () {
-        setTimeout(function () {
+      correspondingCard.addEventListener('animationend', () => {
+        setTimeout(() => {
           correspondingCard.remove();
         }, 100);
       });
@@ -231,4 +225,5 @@ function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
     card.appendChild(edit);
     document.querySelector('.todos').appendChild(card);
   });
-}
+  return todos;
+};
