@@ -10,8 +10,8 @@ function main() {
   document.querySelector('.todos').addEventListener('dragover', function (e) {
     e.preventDefault();
     if (
-      !e.target.classList.contains('dragging') &&
-      e.target.classList.contains('card')
+      !e.target.classList.contains('dragging')
+      && e.target.classList.contains('card')
     ) {
       const draggingCard = document.querySelector('.dragging');
       const cards = [...this.querySelectorAll('.card')];
@@ -51,11 +51,8 @@ function main() {
 
     edit.addEventListener('blur', (e) => {
       const card = e.target.parentElement;
-      const input = card.querySelector('.editInput');
-      const item = card.querySelector('.item');
       const deleteIcon = card.querySelector('.clear');
       const editBtn = card.querySelector('.edit-btn');
-
       deleteIcon.classList.toggle('clearShow');
       editBtn.classList.toggle('editInputShow');
     });
@@ -89,7 +86,7 @@ function main() {
       if (item) {
         const todos = JSON.parse(localStorage.getItem('todos'));
         const currentTodo = todos.find(
-          (todo) => parseInt(todo.id, 10) === parseInt(input.dataset.id, 10)
+          (todo) => parseInt(todo.id, 10) === parseInt(input.dataset.id, 10),
         );
 
         editTodo(todos.indexOf(currentTodo) + 1, item);
@@ -107,7 +104,7 @@ function main() {
     const deleteIndexes = [];
     document.querySelectorAll('.card.checked').forEach((card) => {
       deleteIndexes.push(
-        [...document.querySelectorAll('.todos .card')].indexOf(card)
+        [...document.querySelectorAll('.todos .card')].indexOf(card),
       );
       card.classList.add('fall');
       card.addEventListener('animationend', () => {
@@ -119,13 +116,6 @@ function main() {
     removeManyTodo(deleteIndexes);
   });
 }
-
-const reorderIdInAscendingOrder = (index, newIndex) => {
-  const todos = JSON.parse(localStorage.getItem('todos'));
-  const removed = todos.splice(index, 1);
-  todos.splice(newIndex, 0, removed[0]);
-  return todos;
-};
 
 const stateTodo = (index, completed) => {
   const todos = JSON.parse(localStorage.getItem('todos'));
@@ -215,9 +205,9 @@ const addTodo = (todos = JSON.parse(localStorage.getItem('todos'))) => {
       const { checked } = this;
       stateTodo(
         [...document.querySelectorAll('.todos .card')].indexOf(
-          correspondingCard
+          correspondingCard,
         ),
-        checked
+        checked,
       );
       checked
         ? correspondingCard.classList.add('checked')
@@ -229,8 +219,8 @@ const addTodo = (todos = JSON.parse(localStorage.getItem('todos'))) => {
       correspondingCard.classList.add('fall');
       removeTodo(
         [...document.querySelectorAll('.todos .card')].indexOf(
-          correspondingCard
-        )
+          correspondingCard,
+        ),
       );
       correspondingCard.addEventListener('animationend', () => {
         setTimeout(() => {
