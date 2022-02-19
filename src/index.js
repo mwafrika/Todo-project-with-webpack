@@ -75,29 +75,23 @@ function main() {
     }
     txtInput.focus();
   });
-
   // edit todos on user input
-  const editDescription = document.querySelector('.editInput');
-  // const editInput = document.querySelector('.editInput');
+  document.querySelectorAll('.editInput').forEach((input) => {
+    input.addEventListener('change', function (e) {
+      let item = input.value.trim();
 
-  editDescription?.addEventListener('input', function (e) {
-    console.log('editing', e.target.value);
-    console.log(e.target);
-    const item = editDescription.value.trim() || 'untitled';
-    if (item) {
-      editInpeditDescriptionut.value = '';
-      const todos = JSON.parse(localStorage.getItem('todos'));
-      const currentTodo = todos.find(
-        (todo) => todo.id === parseInt(editDescription.dataset.id)
-      );
-      editTodo(todos.indexOf(currentTodo), item);
+      if (item) {
+        // input.value = '';
+        const todos = JSON.parse(localStorage.getItem('todos'));
+        const currentTodo = todos.find(
+          (todo) => parseInt(todo.id) === parseInt(input.dataset.id)
+        );
 
-      localStorage.setItem('todos', JSON.stringify(todos));
-
-      // currentTodo.item = item;
-      // localStorage.setItem('todos', JSON.stringify(todos));
-      // renderTodo();
-    }
+        editTodo(todos.indexOf(currentTodo) + 1, item);
+        // localStorage.setItem('todos', JSON.stringify(todos));
+        // localStorage.setItem('todos', JSON.stringify(todos));
+      }
+    });
   });
 
   // add todo also on enter key event
@@ -145,8 +139,9 @@ function removeTodo(index) {
 
 // edit todos on user input
 function editTodo(index, item) {
-  const todos = JSON.parse(localStorage.getItem('todos')) || [];
+  const todos = JSON.parse(localStorage.getItem('todos'));
   todos[index].item = item;
+  console.log(todos);
   localStorage.setItem('todos', JSON.stringify(todos));
 }
 
@@ -164,7 +159,7 @@ function removeManyTodo(indexes) {
 
 function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
   if (!todos) {
-    return null;
+    return [];
   }
   const itemsLeft = document.getElementById('items-left');
   // create cards
@@ -199,6 +194,7 @@ function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
     cbInput.setAttribute('type', 'checkbox');
     // set todo item for card
     item.textContent = todo.item;
+
     editInput.setAttribute('type', 'text');
     editInput.setAttribute('data-id', todo.id);
     editInput.setAttribute('value', todo.item);
