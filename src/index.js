@@ -42,15 +42,14 @@ function main() {
         console.log('edit', e.target);
         const card = e.target.parentElement;
         const input = card.querySelector('.editInput');
-        const icon = card.querySelector('.edit-btn');
         const item = card.querySelector('.item');
         const deleteIcon = card.querySelector('.clear');
+        const editBtn = card.querySelector('.edit-btn');
+
         input.classList.toggle('editInputShow');
-        icon.classList.toggle('clearShow');
         item.classList.toggle('hide');
+        editBtn.classList.toggle('hide');
         deleteIcon.classList.toggle('clearShow');
-      } else {
-        console.log('edit none', e.target);
       }
     });
   });
@@ -78,20 +77,25 @@ function main() {
   });
 
   // edit todos on user input
-  const editDescription = document.querySelector('.edit-btn');
-  const editInput = document.querySelector('.editInput');
-  editDescription.addEventListener('click', function () {
-    const item = editInput.value.trim();
+  const editDescription = document.querySelector('.editInput');
+  // const editInput = document.querySelector('.editInput');
+
+  editDescription?.addEventListener('input', function (e) {
+    console.log('editing', e.target.value);
+    console.log(e.target);
+    const item = editDescription.value.trim() || 'untitled';
     if (item) {
-      editInput.value = '';
+      editInpeditDescriptionut.value = '';
       const todos = JSON.parse(localStorage.getItem('todos'));
       const currentTodo = todos.find(
-        (todo) => todo.id === parseInt(editInput.dataset.id)
-      )
-        ? todos.find((todo) => todo.id === parseInt(editInput.dataset.id))
-        : {};
-      currentTodo.item = item;
+        (todo) => todo.id === parseInt(editDescription.dataset.id)
+      );
+      editTodo(todos.indexOf(currentTodo), item);
+
       localStorage.setItem('todos', JSON.stringify(todos));
+
+      // currentTodo.item = item;
+      // localStorage.setItem('todos', JSON.stringify(todos));
       // renderTodo();
     }
   });
@@ -141,7 +145,7 @@ function removeTodo(index) {
 
 // edit todos on user input
 function editTodo(index, item) {
-  const todos = JSON.parse(localStorage.getItem('todos'));
+  const todos = JSON.parse(localStorage.getItem('todos')) || [];
   todos[index].item = item;
   localStorage.setItem('todos', JSON.stringify(todos));
 }
@@ -187,13 +191,19 @@ function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
     editInput.classList.add('editInput');
     check.classList.add('check');
     button.classList.add('clear');
-    icon.classList.add('fa', 'fa-times', 'clear');
+    icon.classList.add('fa', 'fa-times');
     iconEdit.classList.add('fas', 'fa-ellipsis-v');
     // Set attributes
     card.setAttribute('draggable', true);
+    card.setAttribute('data-id', todo.id);
     cbInput.setAttribute('type', 'checkbox');
     // set todo item for card
     item.textContent = todo.item;
+    editInput.setAttribute('type', 'text');
+    editInput.setAttribute('data-id', todo.id);
+    editInput.setAttribute('value', todo.item);
+    editInput.setAttribute('class', 'editInput');
+
     // if completed -> add respective class / attribute
     if (todo.completed) {
       card.classList.add('checked');

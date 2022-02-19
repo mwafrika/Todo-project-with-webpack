@@ -99,7 +99,15 @@ header.card h1 {
   padding-bottom: 20px;
 }
 
-.card span {
+.card .clear {
+  font-size: 20px;
+  color: grey;
+  float: right;
+  width: 25px;
+  cursor: pointer;
+}
+
+.card .edit-btn {
   font-size: 20px;
   color: grey;
   float: right;
@@ -234,15 +242,16 @@ body.light .todos {
 /* CLEAR CONTAINER */
 /* by default, it's hidden */
 .clear {
-  cursor: pointer;
-  pointer-events: none;
-  transition: opacity 0.5s ease;
-  font-size: 1.5em;
   display: none;
 }
 
 .clearShow {
   display: flex;
+
+  cursor: pointer;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  font-size: 1.5em;
 }
 
 .todos .card:hover .clear {
