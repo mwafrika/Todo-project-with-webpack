@@ -1,4 +1,6 @@
+/* eslint-disable no-unused-expressions */
 import '@fortawesome/fontawesome-free/js/all.js';
+
 import('./css/style.css');
 
 document.addEventListener('DOMContentLoaded', main);
@@ -15,7 +17,6 @@ function main() {
       const cards = [...this.querySelectorAll('.card')];
       const currPos = cards.indexOf(draggingCard);
       const newPos = cards.indexOf(e.target);
-      console.log(currPos, newPos);
       if (currPos > newPos) {
         this.insertBefore(draggingCard, e.target);
       } else {
@@ -29,10 +30,8 @@ function main() {
   });
 
   document.querySelectorAll('.edit-btn').forEach((edit) => {
-    edit.addEventListener('click', function (e) {
-      const target = e.target.parentElement.parentElement;
+    edit.addEventListener('click', (e) => {
       if (e.target.classList.contains('editInputShow')) {
-        console.log('edit', e.target);
         const card = e.target.parentElement;
         const input = card.querySelector('.editInput');
         const item = card.querySelector('.item');
@@ -45,43 +44,54 @@ function main() {
         input.classList.add('editInputShow');
         item.classList.add('hide');
         editBtn.classList.add('editInputShow');
-        editBtn.classList.add('editInputShow');
-
         edit.classList.add('hide');
         edit.classList.remove('editInputShow');
       }
+    });
+
+    edit.addEventListener('blur', (e) => {
+      const card = e.target.parentElement;
+      const input = card.querySelector('.editInput');
+      const item = card.querySelector('.item');
+      const deleteIcon = card.querySelector('.clear');
+      const editBtn = card.querySelector('.edit-btn');
+
+      deleteIcon.classList.toggle('clearShow');
+      editBtn.classList.toggle('editInputShow');
     });
   });
 
   const add = document.getElementById('add-btn');
   const txtInput = document.querySelector('.txt-input');
-  add.addEventListener('click', function () {
+  add.addEventListener('click', () => {
     const item = txtInput.value.trim();
     if (item) {
       txtInput.value = '';
       const todos = !localStorage.getItem('todos')
         ? []
-        : JSON.parse(localStorage.getItem('todos'));
+        : JSON.parse(localStorage.getItem('todos')).sort((a, b) => a.id - b.id);
       const currentTodo = {
         id: todos.length + 1,
         item,
         completed: false,
       };
       addTodo([currentTodo]);
-      todos.push(currentTodo);
-      localStorage.setItem('todos', JSON.stringify(todos));
+      localStorage.setItem('todos', JSON.stringify([...todos, currentTodo]));
+
+      // todos.push(currentTodo);
+      // localStorage.setItem('todos', JSON.stringify(todos));
     }
     txtInput.focus();
   });
 
   document.querySelectorAll('.editInput').forEach((input) => {
-    input.addEventListener('change', function (e) {
-      let item = input.value.trim();
+    input.addEventListener('change', () => {
+      const item = input.value.trim();
 
       if (item) {
         const todos = JSON.parse(localStorage.getItem('todos'));
         const currentTodo = todos.find(
-          (todo) => parseInt(todo.id) === parseInt(input.dataset.id)
+          (todo) => parseInt(todo.id, 10) === parseInt(input.dataset.id, 10)
         );
 
         editTodo(todos.indexOf(currentTodo) + 1, item);
@@ -89,64 +99,75 @@ function main() {
     });
   });
 
-  txtInput.addEventListener('keydown', function (e) {
+  txtInput.addEventListener('keydown', (e) => {
     if (e.keyCode === 13) {
       add.click();
     }
   });
 
-  document
-    .getElementById('clear-completed')
-    .addEventListener('click', function () {
-      let deleteIndexes = [];
-      document.querySelectorAll('.card.checked').forEach(function (card) {
-        deleteIndexes.push(
-          [...document.querySelectorAll('.todos .card')].indexOf(card)
-        );
-        card.classList.add('fall');
-        card.addEventListener('animationend', function (e) {
-          setTimeout(function () {
-            card.remove();
-          }, 100);
-        });
+  document.getElementById('clear-completed').addEventListener('click', () => {
+    const deleteIndexes = [];
+    document.querySelectorAll('.card.checked').forEach((card) => {
+      deleteIndexes.push(
+        [...document.querySelectorAll('.todos .card')].indexOf(card)
+      );
+      card.classList.add('fall');
+      card.addEventListener('animationend', () => {
+        setTimeout(() => {
+          card.remove();
+        }, 100);
       });
-      removeManyTodo(deleteIndexes);
     });
+    removeManyTodo(deleteIndexes);
+  });
 }
 
-function stateTodo(index, completed) {
+const reorderIdInAscendingOrder = (index, newIndex) => {
+  const todos = JSON.parse(localStorage.getItem('todos'));
+  const removed = todos.splice(index, 1);
+  todos.splice(newIndex, 0, removed[0]);
+  return todos;
+};
+const stateTodo = (index, completed) => {
   const todos = JSON.parse(localStorage.getItem('todos'));
   todos[index].completed = completed;
   localStorage.setItem('todos', JSON.stringify(todos));
-}
+};
 
-function removeTodo(index) {
+const removeTodo = (index) => {
   const todos = JSON.parse(localStorage.getItem('todos'));
   todos.splice(index, 1);
+  updateRemaining(index);
   localStorage.setItem('todos', JSON.stringify(todos));
-}
+};
 
-function editTodo(index, item) {
+// if an item is removed from the todos array, the id of the remaining items needs to be updated
+const updateRemaining = (indexes) => {
+  const todos = JSON.parse(localStorage.getItem('todos'));
+  indexes.forEach((index) => {
+    todos.splice(index, 1);
+  });
+};
+
+const editTodo = (index, item) => {
   const todos = JSON.parse(localStorage.getItem('todos'));
   todos[index].item = item;
-  console.log(todos);
   localStorage.setItem('todos', JSON.stringify(todos));
-}
+};
 
-function removeManyTodo(indexes) {
+const removeManyTodo = (indexes) => {
   let todos = JSON.parse(localStorage.getItem('todos'));
-  todos = todos.filter(function (todo, index) {
-    return !indexes.includes(index);
-  });
+  todos = todos.filter((todo, index) => !indexes.includes(index));
+  updateRemaining(indexes);
   localStorage.setItem('todos', JSON.stringify(todos));
-}
+};
 
-function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
+const addTodo = (todos = JSON.parse(localStorage.getItem('todos'))) => {
   if (!todos) {
     return [];
   }
 
-  todos.forEach(function (todo) {
+  todos.forEach((todo) => {
     const card = document.createElement('li');
     const cbContainer = document.createElement('div');
     const cbInput = document.createElement('input');
@@ -193,7 +214,7 @@ function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
 
     cbInput.addEventListener('click', function () {
       const correspondingCard = this.parentElement.parentElement;
-      const checked = this.checked;
+      const { checked } = this;
       stateTodo(
         [...document.querySelectorAll('.todos .card')].indexOf(
           correspondingCard
@@ -213,8 +234,8 @@ function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
           correspondingCard
         )
       );
-      correspondingCard.addEventListener('animationend', function () {
-        setTimeout(function () {
+      correspondingCard.addEventListener('animationend', () => {
+        setTimeout(() => {
           correspondingCard.remove();
         }, 100);
       });
@@ -231,4 +252,5 @@ function addTodo(todos = JSON.parse(localStorage.getItem('todos'))) {
     card.appendChild(edit);
     document.querySelector('.todos').appendChild(card);
   });
-}
+  return todos;
+};

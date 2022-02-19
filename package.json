@@ -9,7 +9,7 @@
     "build": "SET NODE_ENV='production' && webpack",
     "deploy1": "git subtree push --prefix dist origin gh-pages",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -b todo-list -d dist"
+    "deploy": "gh-pages -b add-remove -d dist"
   },
   "keywords": [],
   "author": "mwafrika",
