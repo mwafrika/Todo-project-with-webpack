@@ -48,14 +48,6 @@ function main() {
         edit.classList.remove('editInputShow');
       }
     });
-
-    edit.addEventListener('blur', (e) => {
-      const card = e.target.parentElement;
-      const deleteIcon = card.querySelector('.clear');
-      const editBtn = card.querySelector('.edit-btn');
-      deleteIcon.classList.toggle('clearShow');
-      editBtn.classList.toggle('editInputShow');
-    });
   });
 
   const add = document.getElementById('add-btn');
@@ -80,16 +72,17 @@ function main() {
   });
 
   document.querySelectorAll('.editInput').forEach((input) => {
-    input.addEventListener('change', () => {
+    input.addEventListener('keydown', (e) => {
       const item = input.value.trim();
+      if (e.keyCode === 13) {
+        if (item) {
+          const todos = JSON.parse(localStorage.getItem('todos'));
+          const currentTodo = todos.find(
+            (todo) => parseInt(todo.id, 10) === parseInt(input.dataset.id, 10),
+          );
 
-      if (item) {
-        const todos = JSON.parse(localStorage.getItem('todos'));
-        const currentTodo = todos.find(
-          (todo) => parseInt(todo.id, 10) === parseInt(input.dataset.id, 10),
-        );
-
-        editTodo(todos.indexOf(currentTodo) + 1, item);
+          editTodo(todos.indexOf(currentTodo) + 1, item);
+        }
       }
     });
   });
@@ -117,6 +110,12 @@ function main() {
   });
 }
 
+const updateIndex = (arr) => {
+  arr.forEach((task, index) => {
+    task.id = index + 1;
+  });
+};
+
 const stateTodo = (index, completed) => {
   const todos = JSON.parse(localStorage.getItem('todos'));
   todos[index].completed = completed;
@@ -126,27 +125,21 @@ const stateTodo = (index, completed) => {
 const removeTodo = (index) => {
   const todos = JSON.parse(localStorage.getItem('todos'));
   todos.splice(index, 1);
-  updateRemaining(index);
+  updateIndex(todos);
   localStorage.setItem('todos', JSON.stringify(todos));
-};
-
-const updateRemaining = (indexes) => {
-  const todos = JSON.parse(localStorage.getItem('todos'));
-  indexes.forEach((index) => {
-    todos.splice(index, 1);
-  });
 };
 
 const editTodo = (index, item) => {
   const todos = JSON.parse(localStorage.getItem('todos'));
   todos[index].item = item;
+  updateIndex(todos);
   localStorage.setItem('todos', JSON.stringify(todos));
 };
 
 const removeManyTodo = (indexes) => {
   let todos = JSON.parse(localStorage.getItem('todos'));
   todos = todos.filter((todo, index) => !indexes.includes(index));
-  updateRemaining(indexes);
+  updateIndex(todos);
   localStorage.setItem('todos', JSON.stringify(todos));
 };
 
