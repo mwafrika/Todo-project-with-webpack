@@ -3,15 +3,13 @@ import '@fortawesome/fontawesome-free/js/all.js';
 
 import('./css/style.css');
 
-document.addEventListener('DOMContentLoaded', main);
-
-function main() {
+export const main = () => {
   addTodo();
-  document.querySelector('.todos').addEventListener('dragover', function (e) {
+  const dragAndDrop = (e) => {
     e.preventDefault();
     if (
-      !e.target.classList.contains('dragging')
-      && e.target.classList.contains('card')
+      !e.target.classList.contains('dragging') &&
+      e.target.classList.contains('card')
     ) {
       const draggingCard = document.querySelector('.dragging');
       const cards = [...this.querySelectorAll('.card')];
@@ -27,7 +25,8 @@ function main() {
       todos.splice(newPos, 0, removed[0]);
       localStorage.setItem('todos', JSON.stringify(todos));
     }
-  });
+  };
+  document.querySelector('.todos').addEventListener('dragover', dragAndDrop);
 
   document.querySelectorAll('.edit-btn').forEach((edit) => {
     edit.addEventListener('click', (e) => {
@@ -47,12 +46,13 @@ function main() {
         edit.classList.add('hide');
         edit.classList.remove('editInputShow');
       }
-    });
+    }); // toggle input and Icon on click
   });
 
   const add = document.getElementById('add-btn');
   const txtInput = document.querySelector('.txt-input');
-  add.addEventListener('click', () => {
+
+  const addByButton = () => {
     const item = txtInput.value.trim();
     if (item) {
       txtInput.value = '';
@@ -69,7 +69,8 @@ function main() {
       localStorage.setItem('todos', JSON.stringify(todos));
     }
     txtInput.focus();
-  });
+  };
+  add.addEventListener('click', addByButton); // add by button click
 
   document.querySelectorAll('.editInput').forEach((input) => {
     input.addEventListener('keydown', (e) => {
@@ -78,17 +79,18 @@ function main() {
         if (item) {
           const todos = JSON.parse(localStorage.getItem('todos'));
           const currentTodo = todos.find(
-            (todo) => parseInt(todo.id, 10) === parseInt(input.dataset.id, 10),
+            (todo) => parseInt(todo.id, 10) === parseInt(input.dataset.id, 10)
           );
 
           editTodo(todos.indexOf(currentTodo) + 1, item);
         }
       }
-    });
+    }); // edit action
   });
 
   txtInput.addEventListener('keydown', (e) => {
     if (e.keyCode === 13) {
+      // Press enter to add item
       add.click();
     }
   });
@@ -97,7 +99,7 @@ function main() {
     const deleteIndexes = [];
     document.querySelectorAll('.card.checked').forEach((card) => {
       deleteIndexes.push(
-        [...document.querySelectorAll('.todos .card')].indexOf(card),
+        [...document.querySelectorAll('.todos .card')].indexOf(card)
       );
       card.classList.add('fall');
       card.addEventListener('animationend', () => {
@@ -108,42 +110,42 @@ function main() {
     });
     removeManyTodo(deleteIndexes);
   });
-}
+};
 
-const updateIndex = (arr) => {
+export const updateIndex = (arr) => {
   arr.forEach((task, index) => {
     task.id = index + 1;
   });
 };
 
-const stateTodo = (index, completed) => {
+export const stateTodo = (index, completed) => {
   const todos = JSON.parse(localStorage.getItem('todos'));
   todos[index].completed = completed;
   localStorage.setItem('todos', JSON.stringify(todos));
 };
 
-const removeTodo = (index) => {
+export const removeTodo = (index) => {
   const todos = JSON.parse(localStorage.getItem('todos'));
   todos.splice(index, 1);
   updateIndex(todos);
   localStorage.setItem('todos', JSON.stringify(todos));
 };
 
-const editTodo = (index, item) => {
+export const editTodo = (index, item) => {
   const todos = JSON.parse(localStorage.getItem('todos'));
   todos[index].item = item;
   updateIndex(todos);
   localStorage.setItem('todos', JSON.stringify(todos));
 };
 
-const removeManyTodo = (indexes) => {
+export const removeManyTodo = (indexes) => {
   let todos = JSON.parse(localStorage.getItem('todos'));
   todos = todos.filter((todo, index) => !indexes.includes(index));
   updateIndex(todos);
   localStorage.setItem('todos', JSON.stringify(todos));
 };
 
-const addTodo = (todos = JSON.parse(localStorage.getItem('todos'))) => {
+export const addTodo = (todos = JSON.parse(localStorage.getItem('todos'))) => {
   if (!todos) {
     return [];
   }
@@ -198,9 +200,9 @@ const addTodo = (todos = JSON.parse(localStorage.getItem('todos'))) => {
       const { checked } = this;
       stateTodo(
         [...document.querySelectorAll('.todos .card')].indexOf(
-          correspondingCard,
+          correspondingCard
         ),
-        checked,
+        checked
       );
       checked
         ? correspondingCard.classList.add('checked')
@@ -212,8 +214,8 @@ const addTodo = (todos = JSON.parse(localStorage.getItem('todos'))) => {
       correspondingCard.classList.add('fall');
       removeTodo(
         [...document.querySelectorAll('.todos .card')].indexOf(
-          correspondingCard,
-        ),
+          correspondingCard
+        )
       );
       correspondingCard.addEventListener('animationend', () => {
         setTimeout(() => {
@@ -235,3 +237,5 @@ const addTodo = (todos = JSON.parse(localStorage.getItem('todos'))) => {
   });
   return todos;
 };
+
+document.addEventListener('DOMContentLoaded', main);

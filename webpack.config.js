@@ -5,6 +5,7 @@ module.exports = {
   entry: './src/index.js',
   module: {
     rules: [
+      { exclude: ['node_modules'] },
       {
         test: /\.svg$/,
         use: 'svg-inline-loader',
@@ -25,6 +26,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
+    clean: true,
   },
   plugins: [
     new HtmlWebpackPlugin({
