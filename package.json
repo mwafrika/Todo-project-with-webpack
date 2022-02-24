@@ -5,7 +5,7 @@
   "main": "index.js",
   "homepage": "https://mwafrika.github.io/Todo-project-with-webpack/",
   "scripts": {
-    "test": "jest",
+    "test": "jest --collectCoverage",
     "start": "webpack serve --open",
     "build": "SET NODE_ENV='production' && webpack",
     "deploy1": "git subtree push --prefix dist origin gh-pages",
@@ -15,12 +15,12 @@
   "keywords": [],
   "author": "mwafrika",
   "license": "ISC",
-  "jest":{
+  "jest": {
     "moduleNameMapper": {
-     "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
-     "\\.(css|less|scss|sass)$": "identity-obj-proxy"
-   }
- },
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less|scss|sass)$": "identity-obj-proxy"
+    }
+  },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.0.0",
     "@toolz/is-a-regular-object": "^1.0.2",

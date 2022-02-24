@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import * as Dom from './index';
+import * as Dom from '../index';
 
 describe('To do test', () => {
   test('should update the index after removing a task', () => {
